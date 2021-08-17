@@ -173,6 +173,18 @@ app.post("/signup", function (req, res) {
     .collection("users")
     .find({ email: req.body.email })
     .toArray(function (err, user) {
+      if(!req.body.password || !req.body.reppassword){
+        res.status(404).send({logged:false, mensaje:"Introduce una contraseña"})
+    }else{
+        if(!req.body.usuario){
+            res.status(404).send({logged:false, mensaje:"Introduce un usuario"})
+        }else{
+            if(!req.body.email){
+                res.status(404).send({logged:false, mensaje:"Introduce un email"})
+            }else{
+            if(req.body.password !== req.body.reppassword){
+                res.status(404).send({logged:false, mensaje:"Las contraseñas no coinciden"})
+            }else{  
       if (user.length === 0) {
         const saltYHash = creaPass(req.body.password);
         req.app.locals.db.collection("users").insertOne(
@@ -195,7 +207,7 @@ app.post("/signup", function (req, res) {
         );
       } else {
         res.send({logged:false, mensaje: "Usuario ya registrado" });
-      }
+      }}}}}
     });
 });
 
